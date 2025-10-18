@@ -92,7 +92,7 @@ class ShifterCLI:
                     str(frag_file)
                 ]
                 run_ffmpeg(ffmpeg_cmd)
-                fragment_files.append(str(frag_file))
+                fragment_files.append(frag_file)
                 frag_index += 1
 
                 # Cleanup old fragments if rolling buffer is enabled
@@ -117,16 +117,16 @@ class ShifterCLI:
                         str(thumb_file)
                     ]
                     run_ffmpeg(ffmpeg_cmd)
-                    thumbnails.append(str(thumb_file))
+                    thumbnails.append(thumb_file)
 
-            # Manifest entry
+            # Manifest entry (✅ fixed: relative paths)
             entry = {
                 "resolution": res,
                 "bitrate": int(br.replace("k",""))*1000,
-                "videoChunks": sorted([str(f) for f in res_folder.glob("frag_*.shft")]),
-                "audioChunks": sorted([str(f) for f in res_folder.glob("frag_*.shft")]),
-                "thumbnailChunks": thumbnails,
-                "subtitleChunks": [self.args.subtitles] if self.args.subtitles else []
+                "videoChunks": sorted([str(f.relative_to(self.output_dir)) for f in res_folder.glob("frag_*.shft")]),
+                "audioChunks": sorted([str(f.relative_to(self.output_dir)) for f in res_folder.glob("frag_*.shft")]),
+                "thumbnailChunks": [str(f.relative_to(self.output_dir)) for f in thumbnails],
+                "subtitleChunks": [str(Path(self.args.subtitles).relative_to(self.output_dir))] if self.args.subtitles else []
             }
             self.manifest["adaptive"].append(entry)
 
@@ -141,4 +141,3 @@ class ShifterCLI:
 # ----------------------------
 if __name__=="__main__":
     ShifterCLI().run()
-                   
