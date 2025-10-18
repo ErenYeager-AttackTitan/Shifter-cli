@@ -1,0 +1,19 @@
+# Shifter Project Dependencies
+
+# FFmpeg (required for all video/audio processing)
+ffmpeg >= 6.0
+
+# Python (for ShifterCLI)
+python >= 3.10
+
+# Python packages
+# (if using any optional libraries in future)
+requests >= 2.31.0   # for HTTP manifest fetching or remote video access
+websockets >= 11.0   # optional, if implementing live streaming over websockets
+
+# NodeJS (for ShifterJS)
+node >= 20.0
+npm >= 10.0
+
+# Optional: development tools
+git >= 2.40          # for cloning repositories
